@@ -163,6 +163,7 @@ def get_month_over_month_growth():
     query = """
     WITH monthly_sales AS (
         SELECT
+            MAKE_DATE(Year, Month, 1) AS MonthDate,
             Year,
             Month,
             MonthName,
@@ -172,6 +173,7 @@ def get_month_over_month_growth():
     )
 
     SELECT
+        MAKE_DATE(Year, Month, 1) AS MonthDate,
         Year,
         Month,
         MonthName,
