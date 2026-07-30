@@ -2,165 +2,390 @@ import streamlit as st
 import plotly.express as px
 from src.queries import *
 
-# Page setup
+# --------------------------------------------------
+# PAGE CONFIG
+# --------------------------------------------------
+
 st.set_page_config(
     page_title="InsightFlow",
     page_icon="📊",
     layout="wide"
 )
 
+# --------------------------------------------------
+# HELPER FUNCTION
+# --------------------------------------------------
+
+def format_currency(value):
+    if value is None:
+        return "₹0"
+
+    if value >= 1_000_000:
+        return f"₹{value/1_000_000:.2f}M"
+
+    if value >= 1_000:
+        return f"₹{value/1_000:.2f}K"
+
+    return f"₹{value:.2f}"
+
+
+# --------------------------------------------------
+# HEADER
+# --------------------------------------------------
+
 st.title("📊 InsightFlow")
-st.subheader("Business Analytics & Root Cause Intelligence System")
 
-# KPI Cards for all metrics 
-
-kpis = get_kpis()
-
-col1, col2, col3, col4, col5 = st.columns(5)
-
-col1.metric(
-    "Revenue",
-    f"₹{kpis['Total Revenue']:,.0f}"
+st.caption(
+    "Business Analytics & Root Cause Intelligence System"
 )
 
-col2.metric(
-    "Orders",
+# --------------------------------------------------
+# SIDEBAR
+# --------------------------------------------------
+
+with st.sidebar:
+
+    st.title("📊 InsightFlow")
+
+    st.markdown("---")
+
+    st.header("Dashboard Filters")
+
+    selected_country = st.selectbox(
+        "Country",
+        ["All"] + sorted(get_country_sales()["Country"].tolist())
+    )
+
+    st.markdown("---")
+
+    st.info(
+        """
+### InsightFlow
+
+Business Analytics Dashboard
+
+Version 1.0
+
+Python • DuckDB • SQL • Streamlit
+"""
+    )
+
+# --------------------------------------------------
+# LOAD DATA
+# --------------------------------------------------
+
+kpis = get_kpis(selected_country)
+
+monthly = get_monthly_sales(selected_country)
+
+country = get_country_sales()
+
+products = get_top_products(selected_country)
+
+hour = get_sales_by_hour(selected_country)
+
+weekday = get_sales_by_weekday(selected_country)
+
+segments = get_customer_segments(selected_country)
+
+growth = get_month_over_month_growth(selected_country)
+
+customers = get_top_customers(selected_country)
+
+# --------------------------------------------------
+# KPI CARDS
+# --------------------------------------------------
+
+st.markdown("## 📌 Key Performance Indicators")
+
+c1, c2, c3, c4, c5 = st.columns(5)
+
+c1.metric(
+    "💰 Revenue",
+    format_currency(kpis["Total Revenue"])
+)
+
+c2.metric(
+    "🛒 Orders",
     f"{kpis['Total Orders']:,}"
 )
 
-col3.metric(
-    "Customers",
+c3.metric(
+    "👥 Customers",
     f"{kpis['Total Customers']:,}"
 )
 
-col4.metric(
-    "Products",
+c4.metric(
+    "📦 Products",
     f"{kpis['Total Products']:,}"
 )
 
-col5.metric(
-    "Avg Order",
-    f"₹{kpis['Average Order Value']:,.2f}"
+c5.metric(
+    "💳 Avg Order",
+    format_currency(kpis["Average Order Value"])
 )
 
-# Monthly revenue chart 
+# --------------------------------------------------
+# SALES ANALYSIS
+# --------------------------------------------------
 
-monthly = get_monthly_sales()
+st.markdown("---")
 
-fig = px.line(monthly, x="MonthName", y="TotalRevenue", color="Year", markers=True, title="Monthly Revenue Trend")
+st.markdown("## 📈 Sales Analysis")
 
-st.plotly_chart(fig, use_container_width=True)
+fig = px.line(
+    monthly,
+    x="MonthDate",
+    y="TotalRevenue",
+    markers=True,
+    title="Monthly Revenue Trend",
+    template="plotly_white"
+)
 
+fig.update_traces(fill="tozeroy")
 
-# 2 coulmn layout for next coming charts
+fig.update_layout(height=450)
 
-left,right = st.columns(2)
+st.plotly_chart(
+    fig,
+    width="stretch"
+)
 
+# --------------------------------------------------
+# COUNTRY + PRODUCT
+# --------------------------------------------------
 
-# country revenue
-
-country = get_country_sales()
+left, right = st.columns(2)
 
 fig = px.bar(
     country,
     x="Country",
     y="TotalRevenue",
-    title="Revenue by Country"
+    title="Revenue by Country",
+    color="TotalRevenue",
+    color_continuous_scale="Blues",
+    template="plotly_white"
 )
 
-left.plotly_chart(fig,use_container_width=True)
+fig.update_layout(height=450)
 
-# Top products
-
-products = get_top_products()
+left.plotly_chart(
+    fig,
+    width="stretch"
+)
 
 fig = px.bar(
     products,
     x="TotalRevenue",
     y="Description",
     orientation="h",
-    title="Top Products"
+    title="Top Products",
+    color="TotalRevenue",
+    color_continuous_scale="Greens",
+    template="plotly_white"
 )
 
-right.plotly_chart(fig,use_container_width=True)
+fig.update_layout(
+    height=450,
+    yaxis=dict(autorange="reversed")
+)
 
-# sales by hour
+right.plotly_chart(
+    fig,
+    width="stretch"
+)
 
-left,right = st.columns(2)
+# --------------------------------------------------
+# TIME ANALYSIS
+# --------------------------------------------------
 
-hour = get_sales_by_hour()
+st.markdown("---")
+st.markdown("## ⏰ Time Analysis")
+
+left, right = st.columns(2)
 
 fig = px.line(
     hour,
     x="Hour",
     y="TotalRevenue",
     markers=True,
-    title="Sales by Hour"
+    title="Sales by Hour",
+    template="plotly_white"
 )
 
-left.plotly_chart(fig,use_container_width=True)
+fig.update_layout(height=420)
 
-# weekday sales chart
+left.plotly_chart(
+    fig,
+    width="stretch"
+)
 
-weekday = get_sales_by_weekday()
+days = [
+    "Monday",
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    "Friday",
+    "Saturday",
+    "Sunday"
+]
+
+weekday["DayName"] = weekday["DayName"].astype(str)
+
+weekday["DayName"] = (
+    weekday["DayName"]
+    .str.strip()
+    .str.title()
+)
+
+weekday["DayName"] = weekday["DayName"].astype(
+    "category"
+)
+
+weekday["DayName"] = weekday["DayName"].cat.set_categories(
+    days,
+    ordered=True
+)
+
+weekday = weekday.sort_values("DayName")
 
 fig = px.bar(
     weekday,
     x="DayName",
     y="TotalRevenue",
-    title="Sales by Weekday"
+    title="Sales by Weekday",
+    color="TotalRevenue",
+    color_continuous_scale="Oranges",
+    template="plotly_white"
 )
 
-right.plotly_chart(fig,use_container_width=True)
+fig.update_layout(height=420)
 
-# cutomer segments 
+right.plotly_chart(
+    fig,
+    width="stretch"
+)
 
-left,right = st.columns(2)
+# --------------------------------------------------
+# CUSTOMER ANALYSIS
+# --------------------------------------------------
 
-segment = get_customer_segments()
+st.markdown("---")
+st.markdown("## 👥 Customer Analysis")
+
+left, right = st.columns(2)
 
 fig = px.pie(
-    segment,
+    segments,
     values="Customers",
     names="CustomerSegment",
-    title="Customer Segments"
+    title="Customer Segments",
+    hole=0.45
 )
 
-left.plotly_chart(fig,use_container_width=True)
-
-
-# Month over month growth 
-
-growth = get_month_over_month_growth()
-
-fig = px.bar(
-    growth,
-    x="MonthDate",
-    y="GrowthPercent",
-    title="Month-over-Month Growth"
+left.plotly_chart(
+    fig,
+    width="stretch"
 )
-
-right.plotly_chart(fig,use_container_width=True)
-
-# Top customers of the firm 
-
-customers = get_top_customers()
 
 fig = px.bar(
     customers,
     x="CustomerID",
     y="TotalRevenue",
-    title="Top Customers"
+    title="Top Customers",
+    color="TotalRevenue",
+    color_continuous_scale="Purples",
+    template="plotly_white"
 )
 
-st.plotly_chart(fig,use_container_width=True)
+fig.update_layout(height=420)
 
-# Revenue Table
-
-st.subheader("Monthly Revenue Table")
-
-st.dataframe(
-    monthly,
-    use_container_width=True
+right.plotly_chart(
+    fig,
+    width="stretch"
 )
 
+# --------------------------------------------------
+# BUSINESS GROWTH
+# --------------------------------------------------
+
+st.markdown("---")
+st.markdown("## 📊 Business Growth")
+
+growth = growth.dropna(subset=["GrowthPercent"])
+
+fig = px.bar(
+    growth,
+    x="MonthDate",
+    y="GrowthPercent",
+    title="Month-over-Month Revenue Growth",
+    color="GrowthPercent",
+    color_continuous_scale="RdYlGn",
+    template="plotly_white"
+)
+
+fig.update_layout(height=450)
+
+st.plotly_chart(
+    fig,
+    width="stretch"
+)
+
+# --------------------------------------------------
+# EXECUTIVE SUMMARY
+# --------------------------------------------------
+
+st.markdown("---")
+st.markdown("## 📋 Executive Summary")
+
+highest_month = monthly.loc[
+    monthly["TotalRevenue"].idxmax()
+]
+
+top_country = country.iloc[0]
+
+top_product = products.iloc[0]
+
+peak_hour = hour.loc[
+    hour["TotalRevenue"].idxmax()
+]
+
+st.success(
+    f"""
+### Key Business Insights
+
+💰 **Total Revenue:** {format_currency(kpis["Total Revenue"])}
+
+📈 **Highest Revenue Month:** {highest_month["MonthName"]} {highest_month["Year"]}
+
+🌍 **Top Market:** {top_country["Country"]}
+
+🏆 **Best Selling Product:** {top_product["Description"]}
+
+⏰ **Peak Sales Hour:** {int(peak_hour["Hour"])}:00
+
+👥 **Active Customers:** {kpis["Total Customers"]:,}
+"""
+)
+
+st.info(
+    """
+### Business Recommendations
+
+• Increase inventory before peak sales months.
+
+• Prioritize marketing in the highest revenue markets.
+
+• Promote top-selling products more aggressively.
+
+• Schedule campaigns around peak purchasing hours.
+
+• Develop loyalty offers for high-value customers.
+"""
+)
+
+# --------------------------------------------------
+# FOOTER
+# --------------------------------------------------
+
+st.markdown("---")

@@ -1,92 +1,249 @@
-# InsightFlow
+# 📊 InsightFlow – Business Analytics & Root Cause Intelligence System
 
-Business Analytics & Root Cause Intelligence System
+InsightFlow is an interactive Business Intelligence dashboard built using **Python, DuckDB, SQL, Streamlit, and Plotly**. It transforms raw retail transaction data into meaningful business insights through KPI monitoring, trend analysis, customer segmentation, and root-cause intelligence.
 
-InsightFlow is an end-to-end business analytics platform that automates data profiling, KPI generation, anomaly detection, root cause analysis, and AI-assisted executive reporting within a unified Streamlit application.
-
-The project is designed to transform large transactional datasets into actionable business insights through interactive dashboards, statistical analysis, and automated reporting.
+The project demonstrates an end-to-end analytics workflow—from data preparation and SQL-based analysis to interactive visualization and business recommendations.
 
 ---
 
-## Features
+## 🚀 Features
 
-- Automated Data Profiling
-- Interactive KPI Dashboard
-- 25+ Business KPIs
-- Time-series Trend Analysis
-- Statistical Anomaly Detection
-- Root Cause Analysis
-- AI-generated Executive Reports
-- PDF Report Export
-- Interactive Visualizations
-- DuckDB-powered Analytics Engine
-
----
-
-## Technology Stack
-
-- Python
-- SQL
-- DuckDB
-- Streamlit
-- Pandas
-- NumPy
-- Plotly
-- Scikit-learn
+- 📈 Interactive KPI Dashboard
+- 🌍 Country-wise Revenue Analysis
+- 📦 Top Performing Products
+- ⏰ Sales Trend by Hour & Weekday
+- 📅 Monthly Revenue Trend
+- 📊 Month-over-Month Growth Analysis
+- 👥 Customer Segmentation
+- 🏆 Top Customers Analysis
+- 📋 Executive Business Summary
+- 🎯 Business Recommendations
+- 🌐 Dynamic Country Filter
+- ⚡ Fast analytical queries using DuckDB
 
 ---
 
-## Project Architecture
+## 📷 Dashboard Preview
 
-Data Source
-        │
-        ▼
- DuckDB Analytics Engine
-        │
-        ▼
- Data Profiling
-        │
-        ├──────────► KPI Engine
-        │
-        ├──────────► Anomaly Detection
-        │
-        ├──────────► Root Cause Analysis
-        │
-        └──────────► AI Executive Reporting
-                         │
-                         ▼
-                Streamlit Dashboard
+> Add dashboard screenshots here.
+
+Example:
+
+```
+images/dashboard.png
+```
 
 ---
 
-## Current Status
+## 🛠 Tech Stack
 
-🚧 Active Development
-
-Planned Modules
-
-- Data Layer
-- KPI Engine
-- Data Profiling
-- Anomaly Detection
-- Root Cause Explorer
-- AI Reporting
-- PDF Export
-- Automated Testing
+| Category | Technologies |
+|----------|--------------|
+| Language | Python |
+| Database | DuckDB |
+| Query Language | SQL |
+| Dashboard | Streamlit |
+| Visualization | Plotly Express |
+| Data Processing | Pandas |
+| IDE | VS Code |
 
 ---
 
-## Upcoming Features
+## 📂 Project Structure
 
-- Executive Dashboard
-- Interactive Filters
-- Time-series Analysis
-- AI-generated Business Recommendations
-- Downloadable Executive Reports
-- Performance Benchmarking
+```
+InsightFlow/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+│
+├── data/
+│   └── OnlineRetail.csv
+│
+├── src/
+│   ├── database.py
+│   ├── queries.py
+│   └── preprocess.py
+│
+└── images/
+    └── dashboard.png
+```
 
 ---
 
-## License
+## 📊 Dashboard Modules
 
-MIT License
+### 📌 Key Performance Indicators
+
+- Total Revenue
+- Total Orders
+- Total Customers
+- Total Products
+- Average Order Value
+
+---
+
+### 📈 Sales Analysis
+
+- Monthly Revenue Trend
+- Revenue Growth
+- Month-over-Month Growth
+
+---
+
+### 🌍 Geographic Analysis
+
+- Revenue by Country
+
+---
+
+### 📦 Product Analysis
+
+- Top Selling Products
+
+---
+
+### ⏰ Time Analysis
+
+- Sales by Hour
+- Sales by Weekday
+
+---
+
+### 👥 Customer Analysis
+
+- Customer Segmentation
+- Top Customers
+
+---
+
+### 📋 Executive Summary
+
+Automatically summarizes:
+
+- Highest revenue month
+- Top-performing country
+- Best-selling product
+- Peak sales hour
+- Overall business performance
+
+---
+
+## 📈 Business Insights Generated
+
+InsightFlow helps answer questions like:
+
+- Which country contributes the most revenue?
+- Which products generate maximum sales?
+- Which customers drive the business?
+- What are the peak shopping hours?
+- How is revenue growing month-over-month?
+- Which customer segment contributes the highest value?
+
+---
+
+## 📁 Dataset
+
+The project uses the **Online Retail Dataset**, containing transactional records of a UK-based online retailer.
+
+Dataset includes:
+
+- Invoice Number
+- Product Description
+- Quantity
+- Unit Price
+- Revenue
+- Invoice Date
+- Customer ID
+- Country
+
+---
+
+## ⚙️ Installation
+
+Clone the repository
+
+```bash
+git clone https://github.com/yourusername/InsightFlow.git
+```
+
+Move into the project directory
+
+```bash
+cd InsightFlow
+```
+
+Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+Run the application
+
+```bash
+streamlit run app.py
+```
+
+---
+
+## 📊 SQL Analytics Implemented
+
+The project includes SQL-based analytical functions such as:
+
+- KPI Aggregation
+- Monthly Revenue Analysis
+- Country Performance
+- Customer Segmentation
+- Top Products
+- Top Customers
+- Sales by Hour
+- Sales by Weekday
+- Month-over-Month Growth
+- Revenue Contribution Analysis
+
+---
+
+## 🎯 Business Value
+
+InsightFlow enables organizations to:
+
+- Monitor business performance
+- Identify high-value customers
+- Discover top-performing markets
+- Detect revenue trends
+- Support data-driven decision making
+- Generate actionable business insights
+
+---
+
+## 🔮 Future Enhancements
+
+- AI-generated business insights using Large Language Models
+- Predictive sales forecasting
+- Customer Lifetime Value (CLV) analysis
+- Product recommendation engine
+- Profitability analysis
+- Automated anomaly detection
+- Export reports as PDF
+
+---
+
+## 👨‍💻 Author
+
+**Manohar Vinay Mududundi**
+
+Integrated Dual Degree (B.Tech + M.Tech) in Electronics & Communication Engineering
+
+Jawaharlal Nehru Technological University Hyderabad
+
+LinkedIn: *(Add your profile)*
+
+GitHub: *(Add your GitHub profile)*
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
