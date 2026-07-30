@@ -23,15 +23,13 @@ The project demonstrates an end-to-end analytics workflow—from data preparatio
 
 ---
 
-## 📷 Dashboard Preview
+<h3>Dashboard Overview</h3>
 
-> Add dashboard screenshots here.
+<img src="Dashboard_images/Dashboard-1.jpeg" width="900">
+<img src="Dashboard_images/Dashboard-2.jpeg" width="900">
+<img src="Dashboard_images/Dashboard-3.jpeg" width="900">
+<img src="Dashboard_images/Dashboard-4.jpeg" width="900">
 
-Example:
-
-```
-images/dashboard.png
-```
 
 ---
 
@@ -237,10 +235,6 @@ InsightFlow enables organizations to:
 Integrated Dual Degree (B.Tech + M.Tech) in Electronics & Communication Engineering
 
 Jawaharlal Nehru Technological University Hyderabad
-
-LinkedIn: *(Add your profile)*
-
-GitHub: *(Add your GitHub profile)*
 
 ---
 
